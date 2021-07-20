@@ -1,6 +1,6 @@
 # eks-cluster
 
-Resources that will be created
+### Resources that will be created
 - NETWORK
     - VPC
     - Internet Gateway
@@ -28,7 +28,9 @@ Resources that will be created
 
 
 
-Make sure:
+
+
+### Make sure:
 
 - Worker Node has the following tags:
     ```cython
@@ -40,11 +42,19 @@ Make sure:
     ```cython
     kubernetes.io/cluster/<cluster-name> = owned
     ```
-
+- Private Subnet has the following tags
+  ```cython
+   kubernetes.io/cluster/<cluster-name> = shared
+  ```
 - Attach following permission to the IAM role that attached to the Worker Node
     - AmazonEKSWorkerNodePolicy
     - AmazonEKS_CNI_Policy
     - AmazonEC2ContainerRegistryReadOnly
+
+- Attach following permission to the IAM role that attached to the EKS Cluster Role
+  - AmazonEKSClusterPolicy
+  - AmazonEKSServicePolicy
+  - AmazonEKS_CNI_Policy
 
 - Configure the user data for your worker nodes Launch Template
     ```cython

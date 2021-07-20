@@ -1,6 +1,6 @@
 locals {
   env     = terraform.workspace
-  project = "demo-eks-cluster"
+  project = "demo"
   dev     = "Shubho Shaha"
   common_tags = {
     Environment = local.env
@@ -74,19 +74,16 @@ locals {
 #!/bin/bash
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.name}'
-EOF
 USERDATA
     prod = <<USERDATA
 #!/bin/bash
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.name}'
-EOF
 USERDATA
     lt   = <<USERDATA
 #!/bin/bash
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.name}'
-EOF
 USERDATA
   }
   eks_worker_node_userdata = local.tf_eks_worker_node_userdata[local.env]

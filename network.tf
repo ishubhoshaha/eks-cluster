@@ -44,21 +44,21 @@ resource "aws_subnet" "public-subnet-1c" {
 resource "aws_subnet" "private-subnet-1a" {
   cidr_block        = local.private_subnet_1a
   vpc_id            = aws_vpc.vpc.id
-  tags              = merge(map("Name", join("-", [local.env, local.project, "private-subnet-1a"])), map("ResourceType", "SUBNET"), local.common_tags)
+  tags              = merge(map("Name", join("-", [local.env, local.project, "private-subnet-1a"])), map("ResourceType", "SUBNET"), map("kubernetes.io/cluster/${local.env}-${local.project}-eks-cluster", "shared"), local.common_tags)
   availability_zone = "ap-southeast-1a"
 }
 
 resource "aws_subnet" "private-subnet-1b" {
   cidr_block        = local.private_subnet_1b
   vpc_id            = aws_vpc.vpc.id
-  tags              = merge(map("Name", join("-", [local.env, local.project, "private-subnet-1b"])), map("ResourceType", "SUBNET"), local.common_tags)
+  tags              = merge(map("Name", join("-", [local.env, local.project, "private-subnet-1b"])), map("ResourceType", "SUBNET"),map("kubernetes.io/cluster/${local.env}-${local.project}-eks-cluster", "shared"), local.common_tags)
   availability_zone = "ap-southeast-1b"
 }
 
 resource "aws_subnet" "private-subnet-1c" {
   cidr_block        = local.private_subnet_1c
   vpc_id            = aws_vpc.vpc.id
-  tags              = merge(map("Name", join("-", [local.env, local.project, "private-subnet-1c"])), map("ResourceType", "SUBNET"), local.common_tags)
+  tags              = merge(map("Name", join("-", [local.env, local.project, "private-subnet-1c"])), map("ResourceType", "SUBNET"), map("kubernetes.io/cluster/${local.env}-${local.project}-eks-cluster", "shared"), local.common_tags)
   availability_zone = "ap-southeast-1c"
 }
 
