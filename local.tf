@@ -72,89 +72,20 @@ locals {
   tf_eks_worker_node_userdata = {
     uat  = <<USERDATA
 #!/bin/bash
-sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-sudo systemctl enable amazon-ssm-agent
-sudo systemctl restart amazon-ssm-agent
-mkdir -p /var/lib/docker/containers/{authentication-demo-module}
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.name}'
-touch /etc/logrotate.d/module-logrotate
-cat << 'EOF' >/etc/logrotate.d/module-logrotate
-/var/lib/docker/containers/authentication-demo-module/*.log
-{
-    copytruncate
-    dateext
-    dateformat %Y-%m-%d.
-    extension out
-    size 100M
-    daily
-    missingok
-    compress
-    rotate 5
-    create 640 root root
-}
-EOF
-touch /var/spool/cron/root
-cat << 'EOF' >/var/spool/cron/root
-0 * * * * /usr/sbin/logrotate -f /etc/logrotate.d/module-logrotate
 EOF
 USERDATA
     prod = <<USERDATA
 #!/bin/bash
-sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-sudo systemctl enable amazon-ssm-agent
-sudo systemctl restart amazon-ssm-agent
-mkdir -p /var/lib/docker/containers/{authentication-demo-module}
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.name}'
-touch /etc/logrotate.d/module-logrotate
-cat << 'EOF' >/etc/logrotate.d/module-logrotate
-/var/lib/docker/containers/authentication-demo-module/*.log
-{
-    copytruncate
-    dateext
-    dateformat %Y-%m-%d.
-    extension out
-    size 100M
-    daily
-    missingok
-    compress
-    rotate 5
-    create 640 root root
-}
-EOF
-touch /var/spool/cron/root
-cat << 'EOF' >/var/spool/cron/root
-0 * * * * /usr/sbin/logrotate -f /etc/logrotate.d/module-logrotate
 EOF
 USERDATA
     lt   = <<USERDATA
 #!/bin/bash
-sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-sudo systemctl enable amazon-ssm-agent
-sudo systemctl restart amazon-ssm-agent
-mkdir -p /var/lib/docker/containers/{authentication-demo-module}
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.name}'
-touch /etc/logrotate.d/module-logrotate
-cat << 'EOF' >/etc/logrotate.d/module-logrotate
-/var/lib/docker/containers/authentication-demo-module/*.log
-{
-    copytruncate
-    dateext
-    dateformat %Y-%m-%d.
-    extension out
-    size 100M
-    daily
-    missingok
-    compress
-    rotate 5
-    create 640 root root
-}
-EOF
-touch /var/spool/cron/root
-cat << 'EOF' >/var/spool/cron/root
-0 * * * * /usr/sbin/logrotate -f /etc/logrotate.d/module-logrotate
 EOF
 USERDATA
   }

@@ -25,3 +25,13 @@ Resources that will be created
 - AutoScale
 - Keypair
 - Launch Template
+
+
+
+Make sure:
+Worker Node has the following tags:
+```cython
+k8s.io/cluster-autoscaler/<cluster-name> = owned
+k8s.io/cluster-autoscaler/enabled = true
+kubernetes.io/cluster/<cluster-name> = owned
+```
