@@ -4,9 +4,18 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
   tags                 = merge(map("Name", join("-", [local.env, local.project, "vpc"])), map("ResourceType", "VPC"), local.common_tags)
-  lifecycle {
-    prevent_destroy = true
-  }
+  //  lifecycle {
+  //    prevent_destroy = true
+  //  }
+}
+
+################## Internet Gateway ######################
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
+  tags   = merge(map("Name", "${local.env}-${local.project}-igw"), map("ResourceType", "IGW"), local.common_tags)
+  //  lifecycle {
+  //    prevent_destroy = true
+  //  }
 }
 
 ################## SUBNET ######################
@@ -110,3 +119,82 @@ resource "aws_security_group" "eks-worker-node-sg" {
 }
 
 ############### Security Group ###############
+
+############### NAT Gateway ###############
+resource "aws_nat_gateway" "natgw" {
+  allocation_id = aws_eip.eip.id
+  subnet_id     = aws_subnet.public-subnet-1a.id
+  tags          = merge(map("Name", "${local.env}-${local.project}-natgw"), map("ResourceType", "NATGW"), local.common_tags)
+  //  lifecycle {
+  //    prevent_destroy = true
+  //  }
+}
+
+# elastic IP for natgw
+resource "aws_eip" "eip" {
+  vpc  = true
+  tags = merge(map("Name", "${local.env}-${local.project}-natgw-eip"), map("ResourceType", "EIP"), local.common_tags)
+  //  lifecycle {
+  //    prevent_destroy = true
+  //  }
+}
+
+############### Route Table ###############
+
+resource "aws_route_table" "public-route-table" {
+  vpc_id = aws_vpc.vpc.id
+  tags   = merge(map("Name", "${local.env}-${local.project}-public-route-table"), map("ResourceType", "PublicRouteTable"), local.common_tags)
+  //  lifecycle {
+  //    prevent_destroy = true
+  //  }
+}
+
+resource "aws_route_table" "private-route-table" {
+  vpc_id = aws_vpc.vpc.id
+  tags   = merge(map("Name", "${local.env}-${local.project}-private-route-table"), map("ResourceType", "PrivateRouteTable"), local.common_tags)
+  //  lifecycle {
+  //    prevent_destroy = true
+  //  }
+}
+
+resource "aws_route" "public-route-table-igw-route" {
+  route_table_id         = aws_route_table.public-route-table.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+}
+
+resource "aws_route" "route-with-ngw" {
+  route_table_id         = aws_route_table.private-route-table.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.natgw.id
+}
+
+resource "aws_route_table_association" "public-subnet-1a" {
+  route_table_id = aws_route_table.public-route-table.id
+  subnet_id      = aws_subnet.public-subnet-1a.id
+}
+
+resource "aws_route_table_association" "public-subnet-1b" {
+  route_table_id = aws_route_table.public-route-table.id
+  subnet_id      = aws_subnet.public-subnet-1b.id
+}
+
+resource "aws_route_table_association" "public-subnet-1c" {
+  route_table_id = aws_route_table.public-route-table.id
+  subnet_id      = aws_subnet.public-subnet-1c.id
+}
+
+resource "aws_route_table_association" "private-subnet-1a" {
+  route_table_id = aws_route_table.private-route-table.id
+  subnet_id      = aws_subnet.private-subnet-1a.id
+}
+
+resource "aws_route_table_association" "private-subnet-1b" {
+  route_table_id = aws_route_table.private-route-table.id
+  subnet_id      = aws_subnet.private-subnet-1b.id
+}
+
+resource "aws_route_table_association" "private-subnet-1c" {
+  route_table_id = aws_route_table.private-route-table.id
+  subnet_id      = aws_subnet.private-subnet-1c.id
+}

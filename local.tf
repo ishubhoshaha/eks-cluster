@@ -1,6 +1,6 @@
 locals {
   env     = terraform.workspace
-  project = demo-eks-cluster
+  project = "demo-eks-cluster"
   dev     = "Shubho Shaha"
   common_tags = {
     Environment = local.env
@@ -8,9 +8,9 @@ locals {
     Project     = local.project
   }
   tf_vpc_ipblock = {
-    dev  = "10.145.0.0/20"
+    uat  = "10.145.0.0/20"
     prod = "10.145.16.0/20"
-    uat  = "10.145.32.0/20"
+    lt   = "10.145.32.0/20"
   }
   vpc_ipblock = local.tf_vpc_ipblock[local.env]
 
