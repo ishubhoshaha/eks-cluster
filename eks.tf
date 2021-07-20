@@ -4,7 +4,7 @@ resource "aws_eks_cluster" "eks" {
     subnet_ids              = [aws_subnet.private-subnet-1a.id, aws_subnet.private-subnet-1b.id, aws_subnet.private-subnet-1c.id]
     security_group_ids      = [aws_security_group.eks-cluster-sg.id]
     endpoint_private_access = true
-    endpoint_public_access  = true
+    endpoint_public_access  = false
   }
   enabled_cluster_log_types = ["api", "audit"]
   role_arn                  = aws_iam_role.eks-cluster-role.arn
