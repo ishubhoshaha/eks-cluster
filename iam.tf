@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "eks-worker-role-policy-json" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      identifiers = ["eks.amazonaws.com"]
+      identifiers = ["ec2.amazonaws.com"]
       type        = "Service"
     }
   }

@@ -8,9 +8,9 @@ locals {
     Project     = local.project
   }
   tf_vpc_ipblock = {
-    uat  = "10.145.0.0/20"
-    prod = "10.145.16.0/20"
-    lt   = "10.145.32.0/20"
+    uat  = "10.145.0.0/16"
+    prod = "10.145.16.0/16"
+    lt   = "10.145.32.0/16"
   }
   vpc_ipblock = local.tf_vpc_ipblock[local.env]
 
@@ -136,14 +136,12 @@ USERDATA
   asg_mixed_instance_types = local.tf_asg_mixed_instance_types[local.env]
 
   tf_spot_allocation_strategy = {
-    dev  = "0"
-    lt   = "lowest-price"
     uat  = "lowest-price"
     prod = "lowest-price"
+    lt   = "lowest-price"
   }
   spot_allocation_strategy = local.tf_spot_allocation_strategy[local.env]
   tf_on_demand_percentage_above_base_capacity = {
-    sit  = "0"
     uat  = "0"
     prod = "60"
     lt   = "60"
@@ -151,7 +149,6 @@ USERDATA
   on_demand_percentage_above_base_capacity = local.tf_on_demand_percentage_above_base_capacity[local.env]
 
   tf_spot_instance_pools = {
-    sit  = ""
     uat  = "2"
     prod = "2"
     lt   = "2"
