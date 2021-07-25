@@ -19,9 +19,7 @@
     - IAM Role for EKS CLuster Node
     - IAM Role for EKS Worker Node
     
-- EKS
-    - Cluster
-    
+- EKS Cluster
 - AutoScale
 - Keypair
 - Launch Template
@@ -62,3 +60,8 @@
     /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${aws_eks_cluster.eks.name}'
     ```
 - Verify that your worker nodes are in a subnet that is associated with your Amazon EKS cluster
+
+
+[Reference]
+1. https://aws.amazon.com/premiumsupport/knowledge-center/eks-worker-nodes-cluster/
+2. 
